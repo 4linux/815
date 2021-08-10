@@ -1,8 +1,8 @@
 # Definição de maquinas do Laboratório do Elastic Stack
 machines = {
-	"node-primary"       => { "ip" => "10",  "memory" => "512", "cpus" => "1" },
-	"node-secondary"     => { "ip" => "11",  "memory" => "512", "cpus" => "1" },
-  "monitoring"         => { "ip" => "254", "memory" => "512", "cpus" => "1" },
+	"node-primary"       => { "ip" => "10",  "memory" => "1024", "cpus" => "1" },
+	"node-secondary"     => { "ip" => "11",  "memory" => "1024", "cpus" => "1" },
+  "monitoring"         => { "ip" => "254", "memory" => "1024", "cpus" => "1" },
 }
 
 Vagrant.configure("2") do |config|
@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   machines.each do |name,conf|
     config.vm.define "#{name}" do |srv|
       srv.vm.hostname = "#{name}.example.com"
-      srv.vm.network 'private_network', ip: "192.168.100.#{conf["ip"]}"
+      srv.vm.network 'private_network', ip: "192.168.200.#{conf["ip"]}"
       srv.vm.provider 'virtualbox' do |vb|
         vb.name = "#{name}"
         vb.memory = "#{conf["memory"]}"
