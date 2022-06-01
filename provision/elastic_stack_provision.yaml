@@ -1,0 +1,35 @@
+---
+- hosts: all
+  vars:
+    ip_master: 192.168.56.10
+    ip_data: 192.168.56.20
+    ip_monitoring: 192.168.56.30
+  tasks:
+    - name: Garantindo /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ item }}"
+      with_items:
+        - "{{ ip_master }} node-master.example.com node-master"
+        - "{{ ip_data }} node-data.example.com node-data"
+        - "{{ ip_monitoring }} monitoring.example.com monitoring"
+
+    - name: Garantindo pacotes essenciais
+      package:
+        name:
+          - apt-transport-https
+          - curl
+          - vim
+          - telnet
+
+    - name: Configurando nós de elastic
+      block:
+        - name: Garantindo chave do repositório
+          apt_key:
+            url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+        - name: Garantindo repositório
+          apt_repository:
+            repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
+            filename: elastic-8
+      when: ansible_hostname != monitoring
