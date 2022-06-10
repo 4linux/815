@@ -7,7 +7,7 @@ systemctl restart sshd
 
 cat <<EOF > /etc/hosts
 127.0.0.1 localhost.localdomain localhost
-192.168.63.10 node-primary node-primary.elastic
-192.168.63.11 node-secondary node-secondary.elastic
+192.168.63.10 node-master node-master.elastic
+192.168.63.11 node-data node-data.elastic
 192.168.63.20 monitoring  monitoring.elastic
 EOF

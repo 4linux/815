@@ -25,8 +25,8 @@ Nesse laboratórios, que está centralizado no arquivo [Vagrantfile][8], serão 
 
 Nome           | vCPUs | Memoria RAM | IP             | S.O.¹            
 --------------:|:-----:|:-----------:|:--------------:|:------------- 
-node-primary   | 1     | 1024MB       | 192.168.63.10 | ubuntu-20.04  
-node-secondary | 1     | 1024MB       | 192.168.63.11 | ubuntu-20.04  
+node-master    | 1     | 1024MB       | 192.168.63.10 | ubuntu-20.04  
+node-data      | 1     | 1024MB       | 192.168.63.11 | ubuntu-20.04  
 monitoring     | 1     | 1024MB       | 192.168.63.20 | ubuntu-20.04  
 
 
