@@ -32,7 +32,7 @@ monitoring     | 1     | 1024MB       | 192.168.63.20 | ubuntu-20.04
 
 > **¹**: Esses Sistemas operacionais estão sendo utilizados no formato de Boxes, é a forma como o vagrant chama as imagens do sistema operacional utilizado.
 
-> **²**: Para o Script de Provisionamento estamos utilizando Shell Script
+
 
 
 Criação do Laboratório 
