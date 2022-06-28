@@ -14,6 +14,17 @@
         - "{{ ip_data }} node-data.example.com node-data"
         - "{{ ip_monitoring }} monitoring.example.com monitoring"
 
+    - name: Garantindo usuário
+      user:
+        name: sysadmin
+        shell: /bin/bash
+
+    - name: Garantindo poder de super usuário
+      lineinfile:
+        path: /etc/sudoers.d/sysadmin
+        line: sysadmin ALL=(ALL) NOPASSWD:ALL
+        create: yes
+
     - name: Garantindo pacotes essenciais
       package:
         name:
@@ -22,14 +33,12 @@
           - vim
           - telnet
 
-    - name: Configurando nós de elastic
-      block:
-        - name: Garantindo chave do repositório
-          apt_key:
-            url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    - name: Garantindo chave do repositório
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        keyring: /usr/share/keyrings/elasticsearch-keyring.gpg
 
-        - name: Garantindo repositório
-          apt_repository:
-            repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
-            filename: elastic-8
-      when: ansible_hostname != monitoring
+    - name: Garantindo repositório
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
+        filename: elastic-8
