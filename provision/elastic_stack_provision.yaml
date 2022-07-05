@@ -1,9 +1,9 @@
 ---
 - hosts: all
   vars:
-    ip_master: 192.168.56.10
-    ip_data: 192.168.56.20
-    ip_monitoring: 192.168.56.30
+    ip_master: 192.168.63.10
+    ip_data: 192.168.63.11
+    ip_monitoring: 192.168.63.20
   tasks:
     - name: Garantindo /etc/hosts
       lineinfile:
