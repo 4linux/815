@@ -18,12 +18,32 @@
       user:
         name: sysadmin
         shell: /bin/bash
+        generate_ssh_key: yes
+        ssh_key_type: rsa
 
     - name: Garantindo poder de super usuário
       lineinfile:
         path: /etc/sudoers.d/sysadmin
         line: sysadmin ALL=(ALL) NOPASSWD:ALL
         create: yes
+
+    - name: Configurando Private Key
+      copy:
+        src: /vagrant/files/keys/id_rsa
+        dest: /home/sysadmin/.ssh/id_rsa
+        mode: '0600'
+
+    - name: Configurando Public Key
+      copy:
+        src: /vagrant/files/keys/id_rsa.pub
+        dest: /home/sysadmin/.ssh/id_rsa.pub
+        mode: '0644'
+
+    - name: Configurando authorized keys do usuário
+      ansible.posix.authorized_key:
+        user: sysadmin
+        state: present
+        key: "{{ lookup('file', '/vagrant/files/keys/id_rsa.pub') }}"
 
     - name: Garantindo pacotes essenciais
       package:
