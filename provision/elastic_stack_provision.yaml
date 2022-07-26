@@ -10,9 +10,15 @@
         path: /etc/hosts
         line: "{{ item }}"
       with_items:
-        - "{{ ip_master }} node-master.example.com node-master"
-        - "{{ ip_data }} node-data.example.com node-data"
-        - "{{ ip_monitoring }} monitoring.example.com monitoring"
+        - "{{ ip_master }} node-master.elastic node-master"
+        - "{{ ip_data }} node-data.elastic node-data"
+        - "{{ ip_monitoring }} monitoring.elastic monitoring"
+    
+    - name: Ajustando /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127.0.1.1'
+        state: absent
 
     - name: Garantindo usuário
       user:
@@ -51,7 +57,10 @@
           - apt-transport-https
           - curl
           - vim
+          - gnupg
           - telnet
+          - ca-certificates
+          - lsb-release
 
     - name: Garantindo chave do repositório
       apt_key:
@@ -62,3 +71,15 @@
       apt_repository:
         repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
         filename: elastic-8
+
+    - name: Configurando APP na maquina monitoring
+      block:
+        - name: Copiando a pasta app para o servidor
+          copy:
+            src: /vagrant/files/app
+            dest: /root/app
+
+        - name: Incluindo tasks de instalação do docker
+          include_tasks: docker_install.yml
+
+      when: ansible_hostname == 'monitoring'
