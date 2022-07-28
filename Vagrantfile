@@ -6,7 +6,7 @@ machines = {
 }
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "debian/bullseye64"
+  config.vm.box = "ubuntu/focal64"
   machines.each do |name,conf|
     config.vm.define "#{name}" do |srv|
       srv.vm.hostname = "#{name}"

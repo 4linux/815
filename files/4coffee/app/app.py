@@ -1,9 +1,12 @@
 from datetime import datetime
 from flask import Flask, jsonify, request, make_response
 from elasticsearch import Elasticsearch
+import os 
+from dotenv import load_dotenv
 
+load_dotenv()
 
-ES_PWD = '8mYlmA8=yyDetcGd-MYh'
+ES_PWD = os.getenv("ES_PWD") 
 
 es = Elasticsearch(
     "https://192.168.63.10:9200",

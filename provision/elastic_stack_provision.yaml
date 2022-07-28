@@ -17,7 +17,7 @@
     - name: Ajustando /etc/hosts
       lineinfile:
         path: /etc/hosts
-        regexp: '^127.0.1.1'
+        regexp: '^127.0.2.1'
         state: absent
 
     - name: Garantindo usuário
@@ -76,8 +76,8 @@
       block:
         - name: Copiando a pasta app para o servidor
           copy:
-            src: /vagrant/files/app
-            dest: /root/app
+            src: /vagrant/files/4coffee
+            dest: /root
 
         - name: Incluindo tasks de instalação do docker
           include_tasks: docker_install.yml
