@@ -3,6 +3,8 @@ from flask import Flask, jsonify, request, make_response
 from elasticsearch import Elasticsearch
 import os 
 from dotenv import load_dotenv
+from elasticapm.contrib.flask import ElasticAPM
+
 
 load_dotenv()
 
@@ -16,6 +18,16 @@ es = Elasticsearch(
 )
 
 app = Flask(__name__)
+
+app.config['ELASTIC_APM'] = {
+  'SERVICE_NAME': 'flaskApp',
+  'SERVER_URL': 'http://192.168.63.20:8200',
+  'ENVIRONMENT': 'production',
+}
+
+
+apm = ElasticAPM(app)
+
 
 @app.route('/', methods=['GET'])
 def home():
