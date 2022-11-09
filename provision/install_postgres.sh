@@ -4,7 +4,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-
 
 apt update > /dev/null 2>&1  && echo "[OK] APT source list updated"
 
-apt-get install postgresql ruby unzip -y > /dev/null 2>&1  && echo "[OK] PostgreSQL installed"
+apt-get install postgresql-14 ruby unzip -y > /dev/null 2>&1  && echo "[OK] PostgreSQL installed"
 
 rm /etc/postgresql/14/main/pg_hba.conf && touch /etc/postgresql/14/main/pg_hba.conf
 
