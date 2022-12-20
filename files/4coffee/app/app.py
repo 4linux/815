@@ -56,10 +56,16 @@ def home():
 @app.route('/coffee/all', methods=['GET'])
 def index():
     coffees = db.coffee.find()
-    results = es.search(index='4coffee-app', query={"match_all":{}})
+    results = es.search(
+        index='4coffee-app',
+        query={"match_all":{}},
+        filter_path=["hits.hits._source.coffee","hits.hits._source.price","hits.hits._source.sugar","hits.hits._source.customer"]
+        )
 
     db_results = json_util.dumps([coffee for coffee in coffees])
-    return jsonify(results['hits']['hits']['_source'])
+
+    return jsonify(results['hits']['hits'])
+
 
 @app.route('/add_coffee', methods=['POST'])
 def add_coffee():
@@ -83,7 +89,7 @@ def add_coffee():
     return jsonify(response['result']),201
 
 @app.route('/search_customer/<customer>', methods=['POST'])
-def search_coffee(customer):
+def search_customer(customer):
 
     body = {
         "query": {
