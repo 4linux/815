@@ -26,6 +26,8 @@ services:
       - mongodbdata:/data/db
     networks:
       - backend
+    ports:
+      - 27017:27017
   nginx:
     build: ./nginx
     ports:

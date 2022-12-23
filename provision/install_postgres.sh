@@ -4,7 +4,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-
 
 apt update > /dev/null 2>&1  && echo "[OK] APT source list updated"
 
-apt-get install postgresql ruby unzip -y > /dev/null 2>&1  && echo "[OK] PostgreSQL installed"
+apt-get install postgresql-14 ruby unzip -y > /dev/null 2>&1  && echo "[OK] PostgreSQL installed"
 
 rm /etc/postgresql/14/main/pg_hba.conf && touch /etc/postgresql/14/main/pg_hba.conf
 
@@ -13,11 +13,11 @@ echo 'host    all             all          127.0.0.1/32             trust' >> /e
 
 echo 'Restarting PostgreSQL ... ' && systemctl restart postgresql
 
-wget --quiet https://jdbc.postgresql.org/download/postgresql-42.3.1.jar -P /root/ && echo "[OK] JDBC driver downloaded"
+wget --quiet https://jdbc.postgresql.org/download/postgresql-42.3.1.jar -P /home/sysadmin/ && echo "[OK] JDBC driver downloaded"
 
-git clone https://github.com/ankane/movielens.sql.git /root/movielens.sql > /dev/null 2>&1  && echo "[OK] Movielens downloaded"
+git clone https://github.com/ankane/movielens.sql.git /home/sysadmin/movielens.sql > /dev/null 2>&1  && echo "[OK] Movielens downloaded"
 
-cd /root/movielens.sql/
+cd /home/sysadmin/movielens.sql/
 
 wget --quiet https://files.grouplens.org/datasets/movielens/ml-100k.zip
 

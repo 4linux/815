@@ -51,6 +51,10 @@
         state: present
         key: "{{ lookup('file', '/vagrant/files/keys/id_rsa.pub') }}"
 
+
+    - name: Configurando Timedate
+      shell: "timedatectl set-timezone America/Sao_Paulo;systemctl restart systemd-timedated"
+
     - name: Garantindo pacotes essenciais
       package:
         name:
@@ -82,4 +86,8 @@
         - name: Incluindo tasks de instalação do docker
           include_tasks: docker_install.yml
 
+      when: ansible_hostname == 'monitoring'
+
+    - name: Configurando o postgres
+      script: /vagrant/provision/install_postgres.sh
       when: ansible_hostname == 'monitoring'

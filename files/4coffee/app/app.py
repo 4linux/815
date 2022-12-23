@@ -99,7 +99,14 @@ def search_customer(customer):
         }
     }
 
-    res = es.search(index="4coffee-app", body=body)
+    res = es.search(
+            index="4coffee-app", 
+            body=body,
+            filter_path=["hits.hits._source.coffee","hits.hits._source.price","hits.hits._source.sugar","hits.hits._source.customer"]
+            )
+
+    return jsonify(res['hits']['hits'])
+
 
 
 @app.route('/search_coffee/<coffee>', methods=['POST'])
@@ -113,6 +120,11 @@ def search_coffee(coffee):
         }
     }
 
-    res = es.search(index="4coffee-app", body=body)
+    res = es.search(
+            index="4coffee-app", 
+            body=body, 
+            filter_path=["hits.hits._source.coffee","hits.hits._source.price","hits.hits._source.sugar","hits.hits._source.customer"]
+            )
 
     return jsonify(res['hits']['hits'])
+
