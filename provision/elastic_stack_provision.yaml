@@ -1,0 +1,93 @@
+---
+- hosts: all
+  vars:
+    ip_master: 192.168.63.10
+    ip_data: 192.168.63.11
+    ip_monitoring: 192.168.63.20
+  tasks:
+    - name: Garantindo /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ item }}"
+      with_items:
+        - "{{ ip_master }} node-master.elastic node-master"
+        - "{{ ip_data }} node-data.elastic node-data"
+        - "{{ ip_monitoring }} monitoring.elastic monitoring"
+    
+    - name: Ajustando /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127.0.2.1'
+        state: absent
+
+    - name: Garantindo usuário
+      user:
+        name: sysadmin
+        shell: /bin/bash
+        generate_ssh_key: yes
+        ssh_key_type: rsa
+
+    - name: Garantindo poder de super usuário
+      lineinfile:
+        path: /etc/sudoers.d/sysadmin
+        line: sysadmin ALL=(ALL) NOPASSWD:ALL
+        create: yes
+
+    - name: Configurando Private Key
+      copy:
+        src: /vagrant/files/keys/id_rsa
+        dest: /home/sysadmin/.ssh/id_rsa
+        mode: '0600'
+
+    - name: Configurando Public Key
+      copy:
+        src: /vagrant/files/keys/id_rsa.pub
+        dest: /home/sysadmin/.ssh/id_rsa.pub
+        mode: '0644'
+
+    - name: Configurando authorized keys do usuário
+      ansible.posix.authorized_key:
+        user: sysadmin
+        state: present
+        key: "{{ lookup('file', '/vagrant/files/keys/id_rsa.pub') }}"
+
+
+    - name: Configurando Timedate
+      shell: "timedatectl set-timezone America/Sao_Paulo;systemctl restart systemd-timedated"
+
+    - name: Garantindo pacotes essenciais
+      package:
+        name:
+          - apt-transport-https
+          - curl
+          - vim
+          - gnupg
+          - telnet
+          - ca-certificates
+          - lsb-release
+
+    - name: Garantindo chave do repositório
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        keyring: /usr/share/keyrings/elasticsearch-keyring.gpg
+
+    - name: Garantindo repositório
+      apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main"
+        filename: elastic-8
+
+    - name: Configurando APP na maquina monitoring
+      block:
+        - name: Copiando a pasta app para o servidor
+          copy:
+            src: /vagrant/files/4coffee
+            dest: /root
+
+        - name: Incluindo tasks de instalação do docker
+          include_tasks: docker_install.yml
+
+      when: ansible_hostname == 'monitoring'
+
+    - name: Configurando o postgres
+      script: /vagrant/provision/install_postgres.sh
+      when: ansible_hostname == 'monitoring'

@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  4coffee_app:
+    build: 
+      context: ../
+      dockerfile: deployment/Dockerfile
+    command: gunicorn --bind  0.0.0.0:5001 wsgi:app --timeout 0
+    expose:
+      - 5001
+    env_file:
+      - .env
+    networks:
+      - frontend
+      - backend
+  mongodb:
+    image: mongo:6.0
+    command: mongod --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongodbuser
+      MONGO_INITDB_ROOT_PASSWORD: 4linux4linux
+      MONGO_INITDB_DATABASE: 4coffeedb
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - backend
+    ports:
+      - 27017:27017
+  nginx:
+    build: ./nginx
+    ports:
+      - 8080:80
+    depends_on:
+      - 4coffee_app
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  mongodbdata:
+    driver: local
