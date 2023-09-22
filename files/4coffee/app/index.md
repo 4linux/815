@@ -33,8 +33,8 @@ Se liga neste guia:
 
 - Para consultar os pedidos de um cliente
 
-`GET /search_customer/<customer>`
+`POST /search_customer/<customer>`
 
 - Para consultar os pedidos de uma bebida específica
 
-`GET /search_coffee/<coffee>`
+`POST /search_coffee/<coffee>`
