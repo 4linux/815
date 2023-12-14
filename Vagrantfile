@@ -1,7 +1,7 @@
 #Definição de maquinas do Laboratório do Elastic Stack
 machines = {
-	"node-master"       => { "ip" => "10",  "memory" => "2048", "cpus" => "1" },
-	"node-data"     => { "ip" => "11",  "memory" => "2048", "cpus" => "1" },
+	"node-master"       => { "ip" => "10",  "memory" => "1024", "cpus" => "1" },
+	"node-data"     => { "ip" => "11",  "memory" => "1024", "cpus" => "1" },
   "monitoring"         => { "ip" => "20", "memory" => "1024", "cpus" => "1" },
 }
 
